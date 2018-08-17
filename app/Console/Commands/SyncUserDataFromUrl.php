@@ -6,7 +6,6 @@ use ErrorException;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
 use App\Services\UserService;
-use PhpParser\Node\Expr\Cast\Object_;
 
 class SyncUserDataFromUrl extends Command
 {
@@ -94,12 +93,12 @@ class SyncUserDataFromUrl extends Command
         $res = $client->request('GET', $url);
 
         if ($res->getStatusCode() !== 200) {
-            new ErrorException('取得資料異常，不執行此次User資料同步');
+            throw new ErrorException('取得資料異常，不執行此次User資料同步');
         }
         $userData = \GuzzleHttp\json_decode($res->getBody(), true);
 
         if (!$userData) {
-            new ErrorException('User資料解析異常');
+            throw new ErrorException('User資料解析異常');
         }
 
         return $userData;
